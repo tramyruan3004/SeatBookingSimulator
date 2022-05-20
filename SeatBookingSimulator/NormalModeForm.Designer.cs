@@ -1,6 +1,6 @@
 ﻿namespace SeatBookingSimulator
 {
-    partial class NormalMode
+    partial class NormalModeForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -49,11 +49,11 @@
             this.textBoxColDivider = new System.Windows.Forms.TextBox();
             this.radioButtonAdjacentSeat = new System.Windows.Forms.RadioButton();
             this.manualEditor = new System.Windows.Forms.GroupBox();
-            this.buttonManualMode = new System.Windows.Forms.Button();
-            this.radioButtonEnable = new System.Windows.Forms.RadioButton();
-            this.radioButtonDisable = new System.Windows.Forms.RadioButton();
-            this.buttonEnableAll = new System.Windows.Forms.Button();
             this.buttonDisableAll = new System.Windows.Forms.Button();
+            this.buttonEnableAll = new System.Windows.Forms.Button();
+            this.radioButtonDisable = new System.Windows.Forms.RadioButton();
+            this.radioButtonEnable = new System.Windows.Forms.RadioButton();
+            this.buttonManualMode = new System.Windows.Forms.Button();
             this.manualEditor.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -168,10 +168,11 @@
             this.buttonPersonC.TabIndex = 10;
             this.buttonPersonC.Text = "Person C Booking";
             this.buttonPersonC.UseVisualStyleBackColor = false;
+            this.buttonPersonC.Click += new System.EventHandler(this.buttonPersonC_Click);
             // 
             // buttonPersonB
             // 
-            this.buttonPersonB.BackColor = System.Drawing.SystemColors.Info;
+            this.buttonPersonB.BackColor = System.Drawing.Color.SandyBrown;
             this.buttonPersonB.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonPersonB.Location = new System.Drawing.Point(66, 466);
             this.buttonPersonB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -180,10 +181,11 @@
             this.buttonPersonB.TabIndex = 11;
             this.buttonPersonB.Text = "Person B Booking";
             this.buttonPersonB.UseVisualStyleBackColor = false;
+            this.buttonPersonB.Click += new System.EventHandler(this.buttonPersonB_Click);
             // 
             // buttonPersonA
             // 
-            this.buttonPersonA.BackColor = System.Drawing.Color.LightBlue;
+            this.buttonPersonA.BackColor = System.Drawing.Color.CornflowerBlue;
             this.buttonPersonA.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonPersonA.Location = new System.Drawing.Point(66, 417);
             this.buttonPersonA.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -192,6 +194,7 @@
             this.buttonPersonA.TabIndex = 12;
             this.buttonPersonA.Text = "Person A Booking";
             this.buttonPersonA.UseVisualStyleBackColor = false;
+            this.buttonPersonA.Click += new System.EventHandler(this.buttonPersonA_Click);
             // 
             // buttonPersonD
             // 
@@ -204,6 +207,7 @@
             this.buttonPersonD.TabIndex = 13;
             this.buttonPersonD.Text = "Person D Booking";
             this.buttonPersonD.UseVisualStyleBackColor = false;
+            this.buttonPersonD.Click += new System.EventHandler(this.buttonPersonD_Click);
             // 
             // buttonResetSimulation
             // 
@@ -228,6 +232,7 @@
             this.buttonEndSimulation.TabIndex = 15;
             this.buttonEndSimulation.Text = "End simulation";
             this.buttonEndSimulation.UseVisualStyleBackColor = false;
+            this.buttonEndSimulation.Click += new System.EventHandler(this.buttonEndSimulation_Click);
             // 
             // textBoxNumOfRow
             // 
@@ -237,6 +242,7 @@
             this.textBoxNumOfRow.Name = "textBoxNumOfRow";
             this.textBoxNumOfRow.Size = new System.Drawing.Size(166, 45);
             this.textBoxNumOfRow.TabIndex = 16;
+            this.textBoxNumOfRow.TextChanged += new System.EventHandler(this.textBoxNumOfRow_TextChanged);
             // 
             // textBoxSeatPerRow
             // 
@@ -246,6 +252,7 @@
             this.textBoxSeatPerRow.Name = "textBoxSeatPerRow";
             this.textBoxSeatPerRow.Size = new System.Drawing.Size(166, 45);
             this.textBoxSeatPerRow.TabIndex = 17;
+            this.textBoxSeatPerRow.TextChanged += new System.EventHandler(this.textBoxSeatPerRow_TextChanged);
             // 
             // textBoxRowDivider
             // 
@@ -255,6 +262,7 @@
             this.textBoxRowDivider.Name = "textBoxRowDivider";
             this.textBoxRowDivider.Size = new System.Drawing.Size(166, 45);
             this.textBoxRowDivider.TabIndex = 18;
+            this.textBoxRowDivider.TextChanged += new System.EventHandler(this.textBoxRowDivider_TextChanged);
             // 
             // textBoxColDivider
             // 
@@ -264,6 +272,7 @@
             this.textBoxColDivider.Name = "textBoxColDivider";
             this.textBoxColDivider.Size = new System.Drawing.Size(166, 45);
             this.textBoxColDivider.TabIndex = 19;
+            this.textBoxColDivider.TextChanged += new System.EventHandler(this.textBoxColDivider_TextChanged);
             // 
             // radioButtonAdjacentSeat
             // 
@@ -276,6 +285,7 @@
             this.radioButtonAdjacentSeat.TabStop = true;
             this.radioButtonAdjacentSeat.Text = "Only allow adjacent seats";
             this.radioButtonAdjacentSeat.UseVisualStyleBackColor = true;
+            this.radioButtonAdjacentSeat.CheckedChanged += new System.EventHandler(this.radioButtonAdjacentSeat_CheckedChanged);
             // 
             // manualEditor
             // 
@@ -291,28 +301,27 @@
             this.manualEditor.TabStop = false;
             this.manualEditor.Text = "Manual Editor";
             // 
-            // buttonManualMode
+            // buttonDisableAll
             // 
-            this.buttonManualMode.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.buttonManualMode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonManualMode.Location = new System.Drawing.Point(78, 31);
-            this.buttonManualMode.Name = "buttonManualMode";
-            this.buttonManualMode.Size = new System.Drawing.Size(265, 34);
-            this.buttonManualMode.TabIndex = 0;
-            this.buttonManualMode.Text = "Enter Edit Mode";
-            this.buttonManualMode.UseVisualStyleBackColor = false;
+            this.buttonDisableAll.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.buttonDisableAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonDisableAll.Location = new System.Drawing.Point(126, 150);
+            this.buttonDisableAll.Name = "buttonDisableAll";
+            this.buttonDisableAll.Size = new System.Drawing.Size(157, 34);
+            this.buttonDisableAll.TabIndex = 24;
+            this.buttonDisableAll.Text = "Disable All";
+            this.buttonDisableAll.UseVisualStyleBackColor = false;
             // 
-            // radioButtonEnable
+            // buttonEnableAll
             // 
-            this.radioButtonEnable.AutoSize = true;
-            this.radioButtonEnable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.radioButtonEnable.Location = new System.Drawing.Point(79, 71);
-            this.radioButtonEnable.Name = "radioButtonEnable";
-            this.radioButtonEnable.Size = new System.Drawing.Size(94, 29);
-            this.radioButtonEnable.TabIndex = 21;
-            this.radioButtonEnable.TabStop = true;
-            this.radioButtonEnable.Text = "Enable";
-            this.radioButtonEnable.UseVisualStyleBackColor = true;
+            this.buttonEnableAll.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.buttonEnableAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonEnableAll.Location = new System.Drawing.Point(126, 108);
+            this.buttonEnableAll.Name = "buttonEnableAll";
+            this.buttonEnableAll.Size = new System.Drawing.Size(157, 34);
+            this.buttonEnableAll.TabIndex = 23;
+            this.buttonEnableAll.Text = "Enable all";
+            this.buttonEnableAll.UseVisualStyleBackColor = false;
             // 
             // radioButtonDisable
             // 
@@ -326,29 +335,30 @@
             this.radioButtonDisable.Text = "Disable";
             this.radioButtonDisable.UseVisualStyleBackColor = true;
             // 
-            // buttonEnableAll
+            // radioButtonEnable
             // 
-            this.buttonEnableAll.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.buttonEnableAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonEnableAll.Location = new System.Drawing.Point(126, 108);
-            this.buttonEnableAll.Name = "buttonEnableAll";
-            this.buttonEnableAll.Size = new System.Drawing.Size(157, 34);
-            this.buttonEnableAll.TabIndex = 23;
-            this.buttonEnableAll.Text = "Enable all";
-            this.buttonEnableAll.UseVisualStyleBackColor = false;
+            this.radioButtonEnable.AutoSize = true;
+            this.radioButtonEnable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.radioButtonEnable.Location = new System.Drawing.Point(79, 71);
+            this.radioButtonEnable.Name = "radioButtonEnable";
+            this.radioButtonEnable.Size = new System.Drawing.Size(94, 29);
+            this.radioButtonEnable.TabIndex = 21;
+            this.radioButtonEnable.TabStop = true;
+            this.radioButtonEnable.Text = "Enable";
+            this.radioButtonEnable.UseVisualStyleBackColor = true;
             // 
-            // buttonDisableAll
+            // buttonManualMode
             // 
-            this.buttonDisableAll.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.buttonDisableAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonDisableAll.Location = new System.Drawing.Point(126, 150);
-            this.buttonDisableAll.Name = "buttonDisableAll";
-            this.buttonDisableAll.Size = new System.Drawing.Size(157, 34);
-            this.buttonDisableAll.TabIndex = 24;
-            this.buttonDisableAll.Text = "Disable All";
-            this.buttonDisableAll.UseVisualStyleBackColor = false;
+            this.buttonManualMode.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.buttonManualMode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonManualMode.Location = new System.Drawing.Point(78, 31);
+            this.buttonManualMode.Name = "buttonManualMode";
+            this.buttonManualMode.Size = new System.Drawing.Size(265, 34);
+            this.buttonManualMode.TabIndex = 0;
+            this.buttonManualMode.Text = "Enter Edit Mode";
+            this.buttonManualMode.UseVisualStyleBackColor = false;
             // 
-            // NormalMode
+            // NormalModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -375,7 +385,7 @@
             this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.buttonGenerateSeats);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "NormalMode";
+            this.Name = "NormalModeForm";
             this.Text = "Noramal Mode";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.manualEditor.ResumeLayout(false);

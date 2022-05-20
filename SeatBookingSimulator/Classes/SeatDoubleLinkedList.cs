@@ -77,5 +77,6 @@ namespace SeatBookingSimulator.Classes
                 return labels;
             }//End of if..else block
         }//End of GenerateLabels
-    }//End of class
+        
+}//End of class
 }//End of namespace

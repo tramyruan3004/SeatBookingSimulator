@@ -8,18 +8,16 @@ using System.Windows.Forms;
 
 namespace SeatBookingSimulator
 {
-    public partial class Homepage : Form
+    public partial class SafeDistancingModeForm : Form
     {
-        public Homepage()
+        public SafeDistancingModeForm()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void SafeDistancingModeForm_Load(object sender, EventArgs e)
         {
-            this.Hide();
-            NormalMode normalModeForm = new NormalMode();
-            normalModeForm.ShowDialog();
+
         }
     }
 }
