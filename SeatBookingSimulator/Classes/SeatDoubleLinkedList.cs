@@ -8,12 +8,27 @@ namespace SeatBookingSimulator.Classes
     [Serializable]
     internal class SeatDoubleLinkedList
     {
+        private int length = 0;
         //"Always make sure" that this "start" refers to the first node of the list.
         public Node Start { get; set; }
         public SeatDoubleLinkedList()
         {
             this.Start = null;
         }//End of constructor
+        public int GetLength()
+        {
+            if (this.Start != null)
+            {
+                length++;
+            }
+            Node p = this.Start;
+            while (p.Next != null)
+            {
+                p = p.Next;
+                length++;
+            }// End of while
+            return length;
+        }
         public void InsertAtEnd(Seat pSeatData)
         {
             Node newNode = new Node(pSeatData);
@@ -32,6 +47,7 @@ namespace SeatBookingSimulator.Classes
             p.Next = newNode;
             newNode.Prev = p;
         }//End of InsertAtEnd
+        
         public Seat SearchByRowAndColumn(int pRow, int pColumn)
         {
             Node p = this.Start;
@@ -77,6 +93,15 @@ namespace SeatBookingSimulator.Classes
                 return labels;
             }//End of if..else block
         }//End of GenerateLabels
+        public void SetCanBook(bool status)
+        {
+            Node p = this.Start;
+            while (p.Next != null)
+            {
+                p.Seat.CanBook = status;
+                p = p.Next;
+            }
+        }
         
 }//End of class
 }//End of namespace

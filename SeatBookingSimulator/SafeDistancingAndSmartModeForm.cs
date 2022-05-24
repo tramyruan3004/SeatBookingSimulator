@@ -14,5 +14,10 @@ namespace SeatBookingSimulator
         {
             InitializeComponent();
         }
+
+        private void SafeDistancingAndSmartModeForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

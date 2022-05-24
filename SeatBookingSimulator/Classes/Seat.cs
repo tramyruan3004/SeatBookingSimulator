@@ -21,6 +21,7 @@ namespace SeatBookingSimulator.Classes
         private int _rowDivSpace;
 
         private string _belongToPerson = "";
+        private string _canBookedBy = "";
 
         public int Row // property
         {
@@ -46,6 +47,11 @@ namespace SeatBookingSimulator.Classes
         {
             get { return _belongToPerson; } // get method
             set { _belongToPerson = value; } // set method
+        }
+        public string CanBookedBy // property
+        {
+            get { return _canBookedBy; } // get method
+            set { _canBookedBy = value; } // set method
         }
         public bool CanBook // property
         {
@@ -77,7 +83,11 @@ namespace SeatBookingSimulator.Classes
             labelSeat.ForeColor = Color.Black;
             labelSeat.Tag = new SeatInfo() { Row = this.Row, Column = this.Column };
             labelSeat.BackColor = Color.LightBlue;
-            if (this.BookStatus == true)
+            if (this.CanBook == false)
+            {
+                labelSeat.BackColor = Color.IndianRed;
+            }
+            if (this.BookStatus == true && this.CanBook == true)
             {
                 switch (this.BelongToPerson)
                 {
