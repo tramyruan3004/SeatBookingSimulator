@@ -48,6 +48,32 @@ namespace SeatBookingSimulator.Classes
             newNode.Prev = p;
         }//End of InsertAtEnd
         
+        public int ReturnIndNumInLabelList(Seat pSeat)
+        {
+            int ind = 0;
+            Node p = this.Start;
+            while (p != null)
+            {
+                if ((p.Seat.Column == pSeat.Column) && (p.Seat.Row == pSeat.Row))
+                {
+                    //If the node referenced by p satisfies the
+                    //search criteria, exit the loop
+                    //The p will reference the node which satisfies
+                    //the search criteria before exiting the while loop.
+                    break;//Exit the while loop
+                }
+                p = p.Next;//Continue to the next node
+                ind++;
+            }//While loop
+            if (p == null)
+            {
+                return -1;
+            }
+            else
+            {
+                return ind;
+            }//End of if..else block
+        }
         public Seat SearchByRowAndColumn(int pRow, int pColumn)
         {
             Node p = this.Start;
@@ -81,7 +107,6 @@ namespace SeatBookingSimulator.Classes
             {
                 Label labelSeat = p.Seat.CreateLabel();
                 labels.Add(labelSeat);
-
                 p = p.Next; //Continue to the next node
             }//While loop
             if (p == null)
@@ -90,6 +115,8 @@ namespace SeatBookingSimulator.Classes
             }
             else
             {
+                Label labelSeat = p.Seat.CreateLabel();
+                labels.Add(labelSeat);
                 return labels;
             }//End of if..else block
         }//End of GenerateLabels
@@ -99,9 +126,29 @@ namespace SeatBookingSimulator.Classes
             while (p.Next != null)
             {
                 p.Seat.CanBook = status;
+                if (status == false)
+                {
+                    p.Seat.BookStatus = false;
+                    p.Seat.BelongToPerson = "";
+                    p.Seat.CanBookedBy = "";
+                }
                 p = p.Next;
             }
         }
+        public bool ExistSeatBelongToPerson(string referPerson)
+        {
+            Node p = this.Start;
+            while (p.Next != null)
+            {
+                if (p.Seat.BelongToPerson == referPerson)
+                {
+                    return true;
+                };
+                p = p.Next;
+            }
+            return false;
+        }
+
         
 }//End of class
 }//End of namespace

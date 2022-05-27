@@ -253,7 +253,7 @@
             // 
             this.buttonPersonC.BackColor = System.Drawing.Color.LightPink;
             this.buttonPersonC.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonPersonC.Location = new System.Drawing.Point(67, 492);
+            this.buttonPersonC.Location = new System.Drawing.Point(67, 491);
             this.buttonPersonC.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPersonC.Name = "buttonPersonC";
             this.buttonPersonC.Size = new System.Drawing.Size(414, 39);
@@ -266,7 +266,7 @@
             // 
             this.buttonPersonB.BackColor = System.Drawing.Color.SandyBrown;
             this.buttonPersonB.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonPersonB.Location = new System.Drawing.Point(66, 443);
+            this.buttonPersonB.Location = new System.Drawing.Point(66, 442);
             this.buttonPersonB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPersonB.Name = "buttonPersonB";
             this.buttonPersonB.Size = new System.Drawing.Size(414, 39);
@@ -279,7 +279,7 @@
             // 
             this.buttonPersonA.BackColor = System.Drawing.Color.CornflowerBlue;
             this.buttonPersonA.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonPersonA.Location = new System.Drawing.Point(66, 394);
+            this.buttonPersonA.Location = new System.Drawing.Point(66, 393);
             this.buttonPersonA.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPersonA.Name = "buttonPersonA";
             this.buttonPersonA.Size = new System.Drawing.Size(414, 39);
@@ -292,7 +292,7 @@
             // 
             this.buttonPersonD.BackColor = System.Drawing.Color.DarkKhaki;
             this.buttonPersonD.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buttonPersonD.Location = new System.Drawing.Point(67, 541);
+            this.buttonPersonD.Location = new System.Drawing.Point(67, 540);
             this.buttonPersonD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPersonD.Name = "buttonPersonD";
             this.buttonPersonD.Size = new System.Drawing.Size(414, 39);

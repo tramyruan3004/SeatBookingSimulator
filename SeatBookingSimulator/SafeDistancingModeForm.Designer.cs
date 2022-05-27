@@ -53,7 +53,7 @@
             this.buttonEndSimulation = new System.Windows.Forms.Button();
             this.labelMessage = new System.Windows.Forms.Label();
             this.panelSeats = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonSafeDistanceMode = new System.Windows.Forms.Button();
             this.manualEditor.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,6 +78,7 @@
             this.textBoxColDivider.Name = "textBoxColDivider";
             this.textBoxColDivider.Size = new System.Drawing.Size(166, 45);
             this.textBoxColDivider.TabIndex = 33;
+            this.textBoxColDivider.TextChanged += new System.EventHandler(this.textBoxColDivider_TextChanged);
             // 
             // textBoxRowDivider
             // 
@@ -87,6 +88,7 @@
             this.textBoxRowDivider.Name = "textBoxRowDivider";
             this.textBoxRowDivider.Size = new System.Drawing.Size(166, 45);
             this.textBoxRowDivider.TabIndex = 32;
+            this.textBoxRowDivider.TextChanged += new System.EventHandler(this.textBoxRowDivider_TextChanged);
             // 
             // textBoxSeatPerRow
             // 
@@ -96,6 +98,7 @@
             this.textBoxSeatPerRow.Name = "textBoxSeatPerRow";
             this.textBoxSeatPerRow.Size = new System.Drawing.Size(166, 45);
             this.textBoxSeatPerRow.TabIndex = 31;
+            this.textBoxSeatPerRow.TextChanged += new System.EventHandler(this.textBoxSeatPerRow_TextChanged);
             // 
             // textBoxNumOfRow
             // 
@@ -105,6 +108,7 @@
             this.textBoxNumOfRow.Name = "textBoxNumOfRow";
             this.textBoxNumOfRow.Size = new System.Drawing.Size(166, 45);
             this.textBoxNumOfRow.TabIndex = 30;
+            this.textBoxNumOfRow.TextChanged += new System.EventHandler(this.textBoxNumOfRow_TextChanged);
             // 
             // buttonPersonD
             // 
@@ -117,6 +121,7 @@
             this.buttonPersonD.TabIndex = 29;
             this.buttonPersonD.Text = "Person D Booking";
             this.buttonPersonD.UseVisualStyleBackColor = false;
+            this.buttonPersonD.Click += new System.EventHandler(this.buttonPersonD_Click);
             // 
             // buttonPersonA
             // 
@@ -129,6 +134,7 @@
             this.buttonPersonA.TabIndex = 28;
             this.buttonPersonA.Text = "Person A Booking";
             this.buttonPersonA.UseVisualStyleBackColor = false;
+            this.buttonPersonA.Click += new System.EventHandler(this.buttonPersonA_Click);
             // 
             // buttonPersonB
             // 
@@ -141,6 +147,7 @@
             this.buttonPersonB.TabIndex = 27;
             this.buttonPersonB.Text = "Person B Booking";
             this.buttonPersonB.UseVisualStyleBackColor = false;
+            this.buttonPersonB.Click += new System.EventHandler(this.buttonPersonB_Click);
             // 
             // buttonPersonC
             // 
@@ -153,6 +160,7 @@
             this.buttonPersonC.TabIndex = 26;
             this.buttonPersonC.Text = "Person C Booking";
             this.buttonPersonC.UseVisualStyleBackColor = false;
+            this.buttonPersonC.Click += new System.EventHandler(this.buttonPersonC_Click);
             // 
             // label4
             // 
@@ -205,6 +213,7 @@
             this.buttonLoad.TabIndex = 21;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = false;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // buttonGenerateSeats
             // 
@@ -217,6 +226,7 @@
             this.buttonGenerateSeats.TabIndex = 20;
             this.buttonGenerateSeats.Text = "Setup Cinema Seat Layout";
             this.buttonGenerateSeats.UseVisualStyleBackColor = false;
+            this.buttonGenerateSeats.Click += new System.EventHandler(this.buttonGenerateSeats_Click);
             // 
             // manualEditor
             // 
@@ -243,6 +253,7 @@
             this.buttonDisableAll.TabIndex = 24;
             this.buttonDisableAll.Text = "Disable All";
             this.buttonDisableAll.UseVisualStyleBackColor = false;
+            this.buttonDisableAll.Click += new System.EventHandler(this.buttonDisableAll_Click);
             // 
             // buttonEnableAll
             // 
@@ -255,6 +266,7 @@
             this.buttonEnableAll.TabIndex = 23;
             this.buttonEnableAll.Text = "Enable all";
             this.buttonEnableAll.UseVisualStyleBackColor = false;
+            this.buttonEnableAll.Click += new System.EventHandler(this.buttonEnableAll_Click);
             // 
             // radioButtonDisable
             // 
@@ -294,6 +306,7 @@
             this.buttonManualMode.TabIndex = 0;
             this.buttonManualMode.Text = "Enter Edit Mode";
             this.buttonManualMode.UseVisualStyleBackColor = false;
+            this.buttonManualMode.Click += new System.EventHandler(this.buttonManualMode_Click);
             // 
             // buttonResetSimulation
             // 
@@ -306,6 +319,7 @@
             this.buttonResetSimulation.TabIndex = 35;
             this.buttonResetSimulation.Text = "Reset simulation";
             this.buttonResetSimulation.UseVisualStyleBackColor = false;
+            this.buttonResetSimulation.Click += new System.EventHandler(this.buttonResetSimulation_Click);
             // 
             // buttonEndSimulation
             // 
@@ -318,6 +332,7 @@
             this.buttonEndSimulation.TabIndex = 36;
             this.buttonEndSimulation.Text = "End simulation";
             this.buttonEndSimulation.UseVisualStyleBackColor = false;
+            this.buttonEndSimulation.Click += new System.EventHandler(this.buttonEndSimulation_Click);
             // 
             // labelMessage
             // 
@@ -340,24 +355,25 @@
             this.panelSeats.Size = new System.Drawing.Size(1142, 1086);
             this.panelSeats.TabIndex = 38;
             // 
-            // button1
+            // buttonSafeDistanceMode
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(30, 393);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(414, 39);
-            this.button1.TabIndex = 39;
-            this.button1.Text = "Setup Safe Distance Mode";
-            this.button1.UseVisualStyleBackColor = false;
+            this.buttonSafeDistanceMode.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.buttonSafeDistanceMode.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonSafeDistanceMode.Location = new System.Drawing.Point(30, 393);
+            this.buttonSafeDistanceMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonSafeDistanceMode.Name = "buttonSafeDistanceMode";
+            this.buttonSafeDistanceMode.Size = new System.Drawing.Size(414, 39);
+            this.buttonSafeDistanceMode.TabIndex = 39;
+            this.buttonSafeDistanceMode.Text = "Setup Safe Distance Mode";
+            this.buttonSafeDistanceMode.UseVisualStyleBackColor = false;
+            this.buttonSafeDistanceMode.Click += new System.EventHandler(this.buttonSafeDistanceMode_Click);
             // 
             // SafeDistancingModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1609, 1157);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSafeDistanceMode);
             this.Controls.Add(this.panelSeats);
             this.Controls.Add(this.manualEditor);
             this.Controls.Add(this.buttonResetSimulation);
@@ -415,6 +431,6 @@
         private System.Windows.Forms.Button buttonEndSimulation;
         private System.Windows.Forms.Label labelMessage;
         private System.Windows.Forms.Panel panelSeats;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonSafeDistanceMode;
     }
 }

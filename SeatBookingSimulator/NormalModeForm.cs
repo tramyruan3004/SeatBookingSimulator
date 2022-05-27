@@ -29,10 +29,20 @@ namespace SeatBookingSimulator
         {
             InitializeComponent();
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.radioButtonDisable.Click += new System.EventHandler(this.radButtonType_Click);
+            this.radioButtonEnable.Click += new System.EventHandler(this.radButtonType_Click);
+        }//End of Form1_Load
         private void textBoxNumOfRow_TextChanged(object sender, EventArgs e)
         {
             try
             {
+                if (double.Parse(textBoxNumOfRow.Text) == 0)
+                {
+                    buttonGenerateSeats.Enabled = false;
+                    return;
+                }
                 this.inputRow = double.Parse(textBoxNumOfRow.Text);
             }
             catch
@@ -46,6 +56,11 @@ namespace SeatBookingSimulator
         {
             try
             {
+                if (double.Parse(textBoxSeatPerRow.Text) == 0)
+                {
+                    buttonGenerateSeats.Enabled = false;
+                    return;
+                }
                 this.inputCol = double.Parse(textBoxSeatPerRow.Text);
             }
             catch
@@ -55,8 +70,6 @@ namespace SeatBookingSimulator
             }//End of try..catch
             buttonGenerateSeats.Enabled = true;
         }//End of textBoxSeatPerRow_TextChanged
-
-        
         private void textBoxRowDivider_TextChanged(object sender, EventArgs e)
         {
             char[] allowedChars = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','};
@@ -86,7 +99,6 @@ namespace SeatBookingSimulator
             this.splitStrRow = textBoxRowDivider.Text.Split(',');
 
         }//End of textBoxRowDivider_TextChanged
-
         private void textBoxColDivider_TextChanged(object sender, EventArgs e)
         {
             char[] allowedChars = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',' };
@@ -115,13 +127,6 @@ namespace SeatBookingSimulator
             }
             this.splitStrCol = textBoxColDivider.Text.Split(',');
         }//End of textBoxColDivider_TextChanged
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.radioButtonDisable.Click += new System.EventHandler(this.radButtonType_Click);
-            this.radioButtonEnable.Click += new System.EventHandler(this.radButtonType_Click);
-        }//End of Form1_Load
-
 
         private void buttonGenerateSeats_Click(object sender, EventArgs e)
         {
@@ -158,7 +163,11 @@ namespace SeatBookingSimulator
                     labelSeat.Click += new EventHandler(labelSeat_Click);
                     // Adding this control to the Panel control, panelSeats
                     this.panelSeats.Controls.Add(labelSeat);
-                    if (splitStrCol.Length == 1 && j == Convert.ToInt32(splitStrCol[0]))
+                    if (splitStrCol == null  || (splitStrCol.Length == 1 && Convert.ToInt32(splitStrCol[0]) == 0))
+                    {
+                        colDivSpace = 0;
+                    }
+                    else if (splitStrCol.Length == 1 && j == Convert.ToInt32(splitStrCol[0]))
                     {
                         colDivSpace = 50;
                     }
@@ -175,7 +184,11 @@ namespace SeatBookingSimulator
                     }
                     labelList.Add(labelSeat);
                 };
-                if (splitStrRow.Length == 1 && i == Convert.ToInt32(splitStrRow[0]))
+                if (splitStrRow == null || (splitStrRow.Length == 1 && Convert.ToInt32(splitStrRow[0]) == 0))
+                {
+                    rowDivSpace = 0;
+                }
+                else if (splitStrRow.Length == 1 && i == Convert.ToInt32(splitStrRow[0]))
                 {
                     rowDivSpace = 50;
 
@@ -193,6 +206,7 @@ namespace SeatBookingSimulator
                 }
             }
             labelMessage.Text = seatList.GetLength().ToString();
+            buttonGenerateSeats.Enabled = false;
         }
 
         private void buttonManualMode_Click(object sender, EventArgs e)
@@ -226,7 +240,6 @@ namespace SeatBookingSimulator
             }
             return false;
         }
-
         private void labelSeat_Click(object sender, EventArgs e)
         {
             Label label = (Label)sender;
@@ -235,9 +248,7 @@ namespace SeatBookingSimulator
             Seat seat = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column);
             Seat seatLeft = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column - 1);
             Seat seatRight = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column + 1);
-            Seat seatFront = seatList.SearchByRowAndColumn(seatInfo.Row - 1, seatInfo.Column);
-            Seat seatBack = seatList.SearchByRowAndColumn(seatInfo.Row + 1, seatInfo.Column);
-            if (senderText == "manualMode")
+            if (senderText == "manualMode") //for enable or disable seats manually
             {
                 if (radioButtonChecked == "e")
                 {
@@ -250,10 +261,10 @@ namespace SeatBookingSimulator
                     seat.CanBook = false;
                     label.BackColor = Color.IndianRed;
                 }
-            }
+            }//End of manualMode setting
             if (numSeatsSelected == 0) //for the first value
             {
-                if (seat.BookStatus == false && seat.CanBook == true) //seat wasnt selected 
+                if (seat.BookStatus == false && seat.CanBook == true) //selecting an unselected seat 
                 {
                     seat.BookStatus = true;
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
@@ -338,9 +349,9 @@ namespace SeatBookingSimulator
                         seat.BelongToPerson = "";
                         seat.CanBookedBy = "";
                     }
-                }
+                }//End of selecting the first seat
             }
-            else if (numSeatsSelected == 1 && seat.BookStatus == true && seat.CanBook == true) //seat was selected and want to unclick
+            else if (numSeatsSelected == 1 && seat.BookStatus == true && seat.CanBook == true)//unselecting the first selected seat
             {
                 if (senderText == "Person A Booking" && seat.BelongToPerson == "A")
                 {
@@ -423,7 +434,7 @@ namespace SeatBookingSimulator
                     numSeatsSelected--;
                 }
             }
-            else //numSeatsSelected > 1
+            else //(numSeatsSelected > 1) selecting the next seats
             {
                 if (seat.BookStatus == false && seat.CanBook == true)
                 {
@@ -729,7 +740,6 @@ namespace SeatBookingSimulator
                 }
             }
         }
-
         private void buttonLoad_Click(object sender, EventArgs e)
         {
 
@@ -765,6 +775,28 @@ namespace SeatBookingSimulator
                     panelSeats.Controls.Add(label);
                 }
             }
+            buttonGenerateSeats.Enabled = false;
+            buttonPersonA.Enabled = true;
+            buttonPersonB.Enabled = true;
+            buttonPersonC.Enabled = true;
+            buttonPersonD.Enabled = true;
+
+            if (seatList.ExistSeatBelongToPerson("A"))
+            {
+                buttonPersonA.Enabled = false;
+            }
+            if (seatList.ExistSeatBelongToPerson("B"))
+            {
+                buttonPersonB.Enabled = false;
+            }
+            if (seatList.ExistSeatBelongToPerson("C"))
+            {
+                buttonPersonC.Enabled = false;
+            }
+            if (seatList.ExistSeatBelongToPerson("D"))
+            {
+                buttonPersonD.Enabled = false;
+            }
         }//End of buttonLoad_Click
 
         private void buttonEndSimulation_Click(object sender, EventArgs e)
@@ -775,7 +807,6 @@ namespace SeatBookingSimulator
             buttonPersonC.Enabled = false;
             buttonPersonD.Enabled = false;
         }
-
         private void buttonResetSimulation_Click(object sender, EventArgs e)
         {
             seatList.SetCanBook(false);
@@ -784,6 +815,10 @@ namespace SeatBookingSimulator
                 labelS.BackColor = Color.IndianRed;
             }
             manualEditor.Enabled = true;
+            buttonPersonA.Enabled = true;
+            buttonPersonB.Enabled = true;
+            buttonPersonC.Enabled = true; 
+            buttonPersonD.Enabled = true; 
         }
 
         private void radButtonType_Click(object sender, EventArgs e)
@@ -809,7 +844,6 @@ namespace SeatBookingSimulator
             }
             manualEditor.Enabled = true;
         }
-
         private void buttonDisableAll_Click(object sender, EventArgs e)
         {
             seatList.SetCanBook(false);
