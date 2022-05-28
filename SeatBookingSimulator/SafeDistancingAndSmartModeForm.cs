@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.IO;
@@ -21,6 +20,8 @@ namespace SeatBookingSimulator
         string senderText = "";
         int numSeatsSelected = 0;
         string radioButtonChecked = "";
+        int colDiv;
+        int rowDiv;
         List<Label> labelListSDSM = new List<Label>();
         public SafeDistancingAndSmartModeForm()
         {
@@ -52,7 +53,6 @@ namespace SeatBookingSimulator
         }
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-
             string filePath;
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -70,21 +70,31 @@ namespace SeatBookingSimulator
                 if (stream.Length != 0)
                 {
                     seatListSDSM = (SeatDoubleLinkedList)f.Deserialize(stream);
+                    
                 }
                 stream.Close();
-            }
+                panelSeats.Controls.Clear();
 
-            panelSeats.Controls.Clear();
+                List<Label> labelList = seatListSDSM.GenerateLabels();
 
-            List<Label> labelList = seatListSDSM.GenerateLabels();
-
-            foreach (Label label in labelListSDSM)
-            {
+                foreach (Label label in labelList)
                 {
-                    label.Click += new System.EventHandler(labelSeat_Click);
-                    panelSeats.Controls.Add(label);
+                    {
+                        label.Click += new System.EventHandler(labelSeat_Click);
+                        panelSeats.Controls.Add(label);
+                    }
                 }
+                resetState();
             }
+        }//End of buttonLoad_Click
+        private void resetState()
+        {
+            buttonGenerateSeats.Enabled = false;
+            buttonPersonA.Enabled = true;
+            buttonPersonB.Enabled = true;
+            buttonPersonC.Enabled = true;
+            buttonPersonD.Enabled = true;
+
             if (seatListSDSM.ExistSeatBelongToPerson("A"))
             {
                 buttonPersonA.Enabled = false;
@@ -101,7 +111,7 @@ namespace SeatBookingSimulator
             {
                 buttonPersonD.Enabled = false;
             }
-        }//End of buttonLoad_Click
+        }
         private void radButtonType_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Radio button is clicked. The radio button text is " + ((RadioButton)sender).Text);
@@ -152,21 +162,30 @@ namespace SeatBookingSimulator
             }//End of try..catch
             buttonGenerateSeats.Enabled = true;
         }//End of textBoxSeatPerRow_TextChanged
+        private void calculateDividers()
+        {
+            colDiv = (int) (double.Parse(textBoxSeatPerRow.Text) /2);
+            rowDiv = (int)(double.Parse(textBoxNumOfRow.Text) / 2);
+        }
         private void buttonGenerateSeats_Click(object sender, EventArgs e)
         {
             panelSeats.Controls.Clear();
+            calculateDividers();
             Seat s;
+            int colDivSpace = 0;
+            int rowDivSpace = 0;
             for (int i = 1; i <= inputRow; i++)
             {
+                colDivSpace = 0;
                 for (int j = 1; j <= inputCol; j++)
                 {
                     s = new Seat();
-                    s.Row = i; s.Column = j; s.ColDivSpace = 0; s.RowDivSpace = 0;
+                    s.Row = i; s.Column = j; s.ColDivSpace = colDivSpace; s.RowDivSpace = rowDivSpace; s.SmartMode = true;
                     seatListSDSM.InsertAtEnd(s);
                     Label labelSeat = new Label();//Instantiate a new Label type object, labelSeat
                     labelSeat.Text = s.ComputeSeatLabel();//Set the Text property by using a string
                     labelSeat.Location = new Point((60 * (s.Column - 1)) + 60 + (20 * (s.Column - 1)) 
-                        + s.ColDivSpace, (60 * (s.Row - 1)) + 60 + (20 * (s.Row - 1)) + s.RowDivSpace);//Create a Point type object which has x,y coordinate info
+                        + colDivSpace, (60 * (s.Row - 1)) + 60 + (20 * (s.Row - 1)) + rowDivSpace);//Create a Point type object which has x,y coordinate info
                     labelSeat.Size = new Size(60, 60);//Create a Size type object which has the width, height info
                     labelSeat.TextAlign = ContentAlignment.MiddleCenter;//Align the Text to mid - center
                     labelSeat.BorderStyle = BorderStyle.FixedSingle;//Make the border visible
@@ -185,8 +204,12 @@ namespace SeatBookingSimulator
                     labelSeat.Click += new EventHandler(labelSeat_Click);
                     // Adding this control to the Panel control, panelSeats
                     this.panelSeats.Controls.Add(labelSeat);
+                    if (colDiv == 0) {colDivSpace = 0;}
+                    else if (j == colDiv) {colDivSpace = 50;}
                     labelListSDSM.Add(labelSeat);
-                };
+                }
+                if (rowDiv == 0) {rowDivSpace = 0;}
+                else if ( i == rowDiv){rowDivSpace = 50;}
             }
             labelMessage.Text = seatListSDSM.GetLength().ToString();
             buttonGenerateSeats.Enabled = false;
@@ -220,14 +243,16 @@ namespace SeatBookingSimulator
             Seat seatBack = seatListSDSM.SearchByRowAndColumn(seatInfo.Row + 1, seatInfo.Column);
             void changeColorSeatAccToInd(Seat pSeat)
             {
-                if (pSeat.BelongToPerson == "")
+                if (pSeat.BelongToPerson == "" &&
+                    labelListSDSM[seatListSDSM.ReturnIndNumInLabelList(pSeat)].BackColor != Color.IndianRed)
                 {
                     labelListSDSM[seatListSDSM.ReturnIndNumInLabelList(pSeat)].BackColor = Color.LightYellow;
                 }
             }
             void changeBackColorSeatAccToInd(Seat pSeat)
             {
-                if (pSeat.BelongToPerson == "")
+                if (pSeat.BelongToPerson == "" && 
+                    labelListSDSM[seatListSDSM.ReturnIndNumInLabelList(pSeat)].BackColor != Color.IndianRed)
                 {
                     labelListSDSM[seatListSDSM.ReturnIndNumInLabelList(pSeat)].BackColor = Color.LightBlue;
                 }
@@ -261,6 +286,7 @@ namespace SeatBookingSimulator
                     seatLeft.CanBookedBy = person; changeColorSeatAccToInd(seatLeft);
                     seatRight.CanBookedBy = person; changeColorSeatAccToInd(seatRight);
                 }
+                seat.BelongToPerson = person;
             }
             void shortCutUnassignSurrSeat(String person)
             {
@@ -298,7 +324,7 @@ namespace SeatBookingSimulator
                         seat.CanBookedBy = person;
                         seat.BookStatus = false;
                         seat.BelongToPerson = "";
-                        label.BackColor = Color.LightBlue;
+                        label.BackColor = Color.LightYellow;
                     }
                     else if (seatLeft.CanBookedBy == person && seatRight.BelongToPerson == person)
                     {
@@ -307,53 +333,59 @@ namespace SeatBookingSimulator
                         else {seatFront.CanBookedBy = ""; seatBack.CanBookedBy = "";
                             changeBackColorSeatAccToInd(seatFront); changeBackColorSeatAccToInd(seatBack);}
                         seatLeft.CanBookedBy = ""; changeBackColorSeatAccToInd(seatLeft);
-                        seat.CanBookedBy = person;
+                        seat.CanBookedBy = person; 
                         seat.BookStatus = false;
                         seat.BelongToPerson = "";
-                        label.BackColor = Color.LightBlue;
+                        label.BackColor = Color.LightYellow;
                     }
                 }
                 numSeatsSelected--;
             }//End of method shortCutUnassignSurrSeat
-
+            if (senderText == "manualMode") //for enable or disable seats manually
+            {
+                if (radioButtonChecked == "e")
+                {
+                    seat.CanBook = true;
+                    seat.BookStatus = false;
+                    label.BackColor = Color.LightBlue;
+                }
+                else if (radioButtonChecked == "d")
+                {
+                    seat.CanBook = false;
+                    label.BackColor = Color.IndianRed;
+                }
+            }//End of manualMode setting
             if (numSeatsSelected == 0) //for the first value
             {
                 if (seat.BookStatus == false && seat.CanBook == true) //seat wasnt selected 
                 {
-                    seat.BookStatus = true;
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.CornflowerBlue;
-                        seat.BelongToPerson = "A";
                         shortCutAssignSurrSeat("A"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person B Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
                         label.BackColor = Color.SandyBrown;
-                        seat.BelongToPerson = "B";
+                        seat.BookStatus = true;
                         shortCutAssignSurrSeat("B"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person C Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
                         label.BackColor = Color.LightPink;
-                        seat.BelongToPerson = "C";
+                        seat.BookStatus = true;
                         shortCutAssignSurrSeat("C"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person D Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.DarkKhaki;
-                        seat.BelongToPerson = "D";
                         shortCutAssignSurrSeat("D"); //function runs if else statements
                         numSeatsSelected++;
-                    }
-                    else
-                    {
-                        seat.BookStatus = false;
-                        seat.BelongToPerson = "";
-                        seat.CanBookedBy = "";
                     }
                 }
             }
@@ -362,7 +394,6 @@ namespace SeatBookingSimulator
                 if (senderText == "Person A Booking" && seat.BelongToPerson == "A")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
                     shortCutAssignSurrSeat(""); //function runs if else statements
                     numSeatsSelected--;
@@ -370,7 +401,6 @@ namespace SeatBookingSimulator
                 else if (senderText == "Person B Booking" && seat.BelongToPerson == "B")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
                     shortCutAssignSurrSeat(""); //function runs if else statements
                     numSeatsSelected--;
@@ -378,7 +408,6 @@ namespace SeatBookingSimulator
                 else if (senderText == "Person C Booking" && seat.BelongToPerson == "C")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
                     shortCutAssignSurrSeat(""); //function runs if else statements
                     numSeatsSelected--;
@@ -386,7 +415,6 @@ namespace SeatBookingSimulator
                 else if (senderText == "Person D Booking" && seat.BelongToPerson == "D")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
                     shortCutAssignSurrSeat(""); //function runs if else statements
                     numSeatsSelected--;
@@ -396,32 +424,31 @@ namespace SeatBookingSimulator
             {
                 if (seat.BookStatus == false && seat.CanBook == true) //for other seats to select unselected seats
                 {
-                    seat.BookStatus = true;
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "A")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.CornflowerBlue;
-                        seat.BelongToPerson = "A";
                         shortCutAssignSurrSeat("A"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person B Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "B"))
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.SandyBrown;
-                        seat.BelongToPerson = "B";
                         shortCutAssignSurrSeat("B"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person C Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "C"))
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.LightPink;
-                        seat.BelongToPerson = "C";
                         shortCutAssignSurrSeat("C"); //function runs if else statements
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person D Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "D"))
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.DarkKhaki;
-                        seat.BelongToPerson = "D";
                         shortCutAssignSurrSeat("D"); //function runs if else statements
                         numSeatsSelected++;
                     }
@@ -455,9 +482,29 @@ namespace SeatBookingSimulator
                 }
             }
         }
-
+        private void turnSeatToRed()
+        {
+            Node p = seatListSDSM.Start;
+            while (p.Next != null)
+            {
+                if (p.Seat.CanBookedBy != "" && p.Seat.BelongToPerson == "")
+                {
+                    p.Seat.CanBook = false;
+                }
+                p = p.Next;
+            }
+        }
         private void buttonPersonA_Click(object sender, EventArgs e)
         {
+            manualEditor.Enabled = false;
+            turnSeatToRed();
+            foreach (Label l in labelListSDSM)
+            {
+                if (l.BackColor == Color.LightYellow)
+                {
+                    l.BackColor = Color.IndianRed;
+                }
+            }
             if (senderText == "") { senderText = "Person A Booking"; /*by default all enabled*/}
             else if (senderText == "manualMode") { senderText = "Person A Booking"; }
             else if (senderText == "Person B Booking") { buttonPersonB.Enabled = false; }
@@ -468,6 +515,15 @@ namespace SeatBookingSimulator
         }
         private void buttonPersonB_Click(object sender, EventArgs e)
         {
+            manualEditor.Enabled = false;
+            turnSeatToRed();
+            foreach (Label l in labelListSDSM)
+            {
+                if (l.BackColor == Color.LightYellow)
+                {
+                    l.BackColor = Color.IndianRed;
+                }
+            }
             if (senderText == "") { senderText = "Person B Booking"; }
             else if (senderText == "manualMode") { senderText = "Person B Booking"; }
             else if (senderText == "Person A Booking") { buttonPersonA.Enabled = false; }
@@ -478,6 +534,15 @@ namespace SeatBookingSimulator
         }
         private void buttonPersonC_Click(object sender, EventArgs e)
         {
+            manualEditor.Enabled = false;
+            turnSeatToRed();
+            foreach (Label l in labelListSDSM)
+            {
+                if (l.BackColor == Color.LightYellow)
+                {
+                    l.BackColor = Color.IndianRed;
+                }
+            }
             if (senderText == "") { senderText = "Person C Booking"; }
             else if (senderText == "manualMode") { senderText = "Person C Booking"; }
             else if (senderText == "Person A Booking") { buttonPersonA.Enabled = false; }
@@ -488,6 +553,15 @@ namespace SeatBookingSimulator
         }
         private void buttonPersonD_Click(object sender, EventArgs e)
         {
+            manualEditor.Enabled = false;
+            turnSeatToRed();
+            foreach (Label l in labelListSDSM)
+            {
+                if (l.BackColor == Color.LightYellow)
+                {
+                    l.BackColor = Color.IndianRed;
+                }
+            }
             if (senderText == "") { senderText = "Person D Booking"; }
             else if (senderText == "manualMode") { senderText = "Person D Booking"; }
             else if (senderText == "Person A Booking") { buttonPersonA.Enabled = false; }

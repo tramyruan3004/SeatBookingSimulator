@@ -382,7 +382,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "NormalModeForm";
             this.Text = "Noramal Mode";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.NormalModeForm_Load);
             this.manualEditor.ResumeLayout(false);
             this.manualEditor.PerformLayout();
             this.ResumeLayout(false);

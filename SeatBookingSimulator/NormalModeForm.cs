@@ -29,11 +29,11 @@ namespace SeatBookingSimulator
         {
             InitializeComponent();
         }
-        private void Form1_Load(object sender, EventArgs e)
+        private void NormalModeForm_Load(object sender, EventArgs e)
         {
             this.radioButtonDisable.Click += new System.EventHandler(this.radButtonType_Click);
             this.radioButtonEnable.Click += new System.EventHandler(this.radButtonType_Click);
-        }//End of Form1_Load
+        }
         private void textBoxNumOfRow_TextChanged(object sender, EventArgs e)
         {
             try
@@ -248,6 +248,62 @@ namespace SeatBookingSimulator
             Seat seat = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column);
             Seat seatLeft = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column - 1);
             Seat seatRight = seatList.SearchByRowAndColumn(seatInfo.Row, seatInfo.Column + 1);
+
+            void shortCutAssignSurrSeat(String person) //local function
+            {
+                seat.BelongToPerson = person;
+                if (checkSeatMostLeft(seat))
+                {
+                    seatRight.CanBookedBy = person;
+                }
+                else if (checkSeatMostRight(seat))
+                {
+                    seatLeft.CanBookedBy = person;
+                }
+                else
+                {
+                    seatLeft.CanBookedBy = person; 
+                    seatRight.CanBookedBy = person;
+                }
+            }
+            void shortCutUnassignSurrSeat(String person)
+            {
+                if (checkSeatMostLeft(seat))
+                {
+                    seatRight.CanBookedBy = "";
+                    seat.BookStatus = false;
+                    seat.BelongToPerson = "";
+                    label.BackColor = Color.LightBlue;
+                }
+                else if (checkSeatMostRight(seat))
+                {
+                    seatLeft.CanBookedBy = "";
+                    seat.BookStatus = false;
+                    seat.BelongToPerson = "";
+                    label.BackColor = Color.LightBlue;
+                }
+                else
+                {
+                    if (seatRight.CanBookedBy == person && seatLeft.BelongToPerson == person)
+                    {
+                        seatRight.CanBookedBy = "";
+                        seat.CanBookedBy = person;
+                        seat.BookStatus = false;
+                        seat.BelongToPerson = "";
+                        label.BackColor = Color.LightBlue;
+                    }
+                    else if (seatLeft.CanBookedBy == person && seatRight.BelongToPerson == person)
+                    {
+                        seatLeft.CanBookedBy = "";
+                        seat.CanBookedBy = person;
+                        seat.BookStatus = false;
+                        seat.BelongToPerson = "";
+                        label.BackColor = Color.LightBlue;
+                    }
+                }
+                numSeatsSelected--;
+            }
+
             if (senderText == "manualMode") //for enable or disable seats manually
             {
                 if (radioButtonChecked == "e")
@@ -266,88 +322,33 @@ namespace SeatBookingSimulator
             {
                 if (seat.BookStatus == false && seat.CanBook == true) //selecting an unselected seat 
                 {
-                    seat.BookStatus = true;
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.CornflowerBlue;
-                        seat.BelongToPerson = "A";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "A";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "A";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "A";
-                            seatRight.CanBookedBy = "A";
-                        }
+                        shortCutAssignSurrSeat("A");
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person B Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.SandyBrown;
-                        seat.BelongToPerson = "B";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "B";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "B";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "B";
-                            seatRight.CanBookedBy = "B";
-                        }
+                        shortCutAssignSurrSeat("B");
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person C Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.LightPink;
-                        seat.BelongToPerson = "C";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "C";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "C";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "C";
-                            seatRight.CanBookedBy = "C";
-                        }
+                        shortCutAssignSurrSeat("C");
                         numSeatsSelected++;
                     }
                     else if (senderText == "Person D Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.DarkKhaki;
-                        seat.BelongToPerson = "D";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "D";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "D";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "D";
-                            seatRight.CanBookedBy = "D";
-                        }
+                        shortCutAssignSurrSeat("D");
                         numSeatsSelected++;
-                    }
-                    else
-                    {
-                        seat.BookStatus = false;
-                        seat.BelongToPerson = "";
-                        seat.CanBookedBy = "";
                     }
                 }//End of selecting the first seat
             }
@@ -356,81 +357,29 @@ namespace SeatBookingSimulator
                 if (senderText == "Person A Booking" && seat.BelongToPerson == "A")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
-                    if (checkSeatMostLeft(seat))
-                    {
-                        seatRight.CanBookedBy = "";
-                    }
-                    else if (checkSeatMostRight(seat))
-                    {
-                        seatLeft.CanBookedBy = "";
-                    }
-                    else
-                    {
-                        seatLeft.CanBookedBy = "";
-                        seatRight.CanBookedBy = "";
-                    }
+                    shortCutAssignSurrSeat("");
                     numSeatsSelected--;
                 }
                 else if (senderText == "Person B Booking" && seat.BelongToPerson == "B")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
-                    if (checkSeatMostLeft(seat))
-                    {
-                        seatRight.CanBookedBy = "";
-                    }
-                    else if (checkSeatMostRight(seat))
-                    {
-                        seatLeft.CanBookedBy = "";
-                    }
-                    else
-                    {
-                        seatLeft.CanBookedBy = "";
-                        seatRight.CanBookedBy = "";
-                    }
+                    shortCutAssignSurrSeat("");
                     numSeatsSelected--;
                 }
                 else if (senderText == "Person C Booking" && seat.BelongToPerson == "C")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
-                    if (checkSeatMostLeft(seat))
-                    {
-                        seatRight.CanBookedBy = "";
-                    }
-                    else if (checkSeatMostRight(seat))
-                    {
-                        seatLeft.CanBookedBy = "";
-                    }
-                    else
-                    {
-                        seatLeft.CanBookedBy = "";
-                        seatRight.CanBookedBy = "";
-                    }
+                    shortCutAssignSurrSeat("");
                     numSeatsSelected--;
                 }
                 else if (senderText == "Person D Booking" && seat.BelongToPerson == "D")
                 {
                     seat.BookStatus = false;
-                    seat.BelongToPerson = "";
                     label.BackColor = Color.LightBlue;
-                    if (checkSeatMostLeft(seat))
-                    {
-                        seatRight.CanBookedBy = "";
-                    }
-                    else if (checkSeatMostRight(seat))
-                    {
-                        seatLeft.CanBookedBy = "";
-                    }
-                    else
-                    {
-                        seatLeft.CanBookedBy = "";
-                        seatRight.CanBookedBy = "";
-                    }
+                    shortCutAssignSurrSeat("");
                     numSeatsSelected--;
                 }
             }
@@ -438,240 +387,57 @@ namespace SeatBookingSimulator
             {
                 if (seat.BookStatus == false && seat.CanBook == true)
                 {
-                    seat.BookStatus = true;
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "A")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.CornflowerBlue;
-                        seat.BelongToPerson = "A";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "A";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "A";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "A";
-                            seatRight.CanBookedBy = "A";
-                        }
+                        shortCutAssignSurrSeat("A");
                         numSeatsSelected++;
                     }
-                    else if (senderText == "Person B Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "B"))
+                    else if (senderText == "Person B Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "B")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.SandyBrown;
-                        seat.BelongToPerson = "B";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "B";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "B";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "B";
-                            seatRight.CanBookedBy = "B";
-                        }
+                        shortCutAssignSurrSeat("B");
                         numSeatsSelected++;
-
                     }
-                    else if (senderText == "Person C Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "C"))
+                    else if (senderText == "Person C Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "C")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.LightPink;
-                        seat.BelongToPerson = "C";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "C";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "C";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "C";
-                            seatRight.CanBookedBy = "C";
-                        }
+                        shortCutAssignSurrSeat("C");
                         numSeatsSelected++;
-
                     }
-                    else if (senderText == "Person D Booking" && seat.BelongToPerson == "" && (seat.CanBookedBy == "D"))
+                    else if (senderText == "Person D Booking" && seat.BelongToPerson == "" && seat.CanBookedBy == "D")
                     {
+                        seat.BookStatus = true;
                         label.BackColor = Color.DarkKhaki;
-                        seat.BelongToPerson = "D";
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "D";
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "D";
-                        }
-                        else
-                        {
-                            seatLeft.CanBookedBy = "D";
-                            seatRight.CanBookedBy = "D";
-                        }
+                        shortCutAssignSurrSeat("D");
                         numSeatsSelected++;
-
                     }
+
                 }
                 else if (seat.BookStatus == true && seat.CanBook == true) //unclick //seat.BookStatus == true
                 {
                     if (senderText == "Person A Booking" && seat.BelongToPerson == "A" && 
                         (seatRight.BelongToPerson != "A" || seatLeft.BelongToPerson != "A"))
                     {
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else 
-                        {
-                            if (seatRight.CanBookedBy == "A" && seatLeft.BelongToPerson == "A")
-                            {
-                                seatRight.CanBookedBy = "";
-                                seat.CanBookedBy = "A";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                            else if (seatLeft.CanBookedBy == "A" && seatRight.BelongToPerson == "A")
-                            {
-                                seatLeft.CanBookedBy = "";
-                                seat.CanBookedBy = "A";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                        }
-                        numSeatsSelected--;
+                        shortCutUnassignSurrSeat("A");
                     }
                     else if (senderText == "Person B Booking" && seat.BelongToPerson == "B" &&
                         (seatRight.BelongToPerson != "B" || seatLeft.BelongToPerson != "B"))
                     {
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else
-                        {
-                            if (seatRight.CanBookedBy == "B" && seatLeft.BelongToPerson == "B")
-                            {
-                                seatRight.CanBookedBy = "";
-                                seat.CanBookedBy = "B";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                            else if (seatLeft.CanBookedBy == "B" && seatRight.BelongToPerson == "B")
-                            {
-                                seatLeft.CanBookedBy = "";
-                                seat.CanBookedBy = "B";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                        }
-                        numSeatsSelected--;
+                        shortCutUnassignSurrSeat("B");
                     }
                     else if (senderText == "Person C Booking" && seat.BelongToPerson == "C" &&
                         (seatRight.BelongToPerson != "C" || seatLeft.BelongToPerson != "C"))
                     {
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else
-                        {
-                            if (seatRight.CanBookedBy == "C" && seatLeft.BelongToPerson == "C")
-                            {
-                                seatRight.CanBookedBy = "";
-                                seat.CanBookedBy = "C";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                            else if (seatLeft.CanBookedBy == "C" && seatRight.BelongToPerson == "C")
-                            {
-                                seatLeft.CanBookedBy = "";
-                                seat.CanBookedBy = "C";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                        }
-                        numSeatsSelected--;
+                        shortCutUnassignSurrSeat("C");
                     }
                     else if (senderText == "Person D Booking" && seat.BelongToPerson == "D" &&
                         (seatRight.BelongToPerson != "D" || seatLeft.BelongToPerson != "D"))
                     {
-                        if (checkSeatMostLeft(seat))
-                        {
-                            seatRight.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else if (checkSeatMostRight(seat))
-                        {
-                            seatLeft.CanBookedBy = "";
-                            seat.BookStatus = false;
-                            seat.BelongToPerson = "";
-                            label.BackColor = Color.LightBlue;
-                        }
-                        else
-                        {
-                            if (seatRight.CanBookedBy == "D" && seatLeft.BelongToPerson == "D")
-                            {
-                                seatRight.CanBookedBy = "";
-                                seat.CanBookedBy = "D";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                            else if (seatLeft.CanBookedBy == "D" && seatRight.BelongToPerson == "D")
-                            {
-                                seatLeft.CanBookedBy = "";
-                                seat.CanBookedBy = "D";
-                                seat.BookStatus = false;
-                                seat.BelongToPerson = "";
-                                label.BackColor = Color.LightBlue;
-                            }
-                        }
-                        numSeatsSelected--;
+                        shortCutUnassignSurrSeat("D");
                     }
                 }
             }
@@ -739,12 +505,10 @@ namespace SeatBookingSimulator
                     stream.Close();
                 }
             }
-        }
+        }//End of buttonLoad_Click
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-
             string filePath;
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Application.StartupPath, "..\\..\\..\\Data"));
             openFileDialog.Filter = "Data Files (*.dat)|*.dat";
@@ -760,21 +524,24 @@ namespace SeatBookingSimulator
                 if (stream.Length != 0)
                 {
                     seatList = (SeatDoubleLinkedList)f.Deserialize(stream);
+                    panelSeats.Controls.Clear();
+
+                    List<Label> labelListSD = seatList.GenerateLabels();
+
+                    foreach (Label label in labelListSD)
+                    {
+                        {
+                            label.Click += new System.EventHandler(labelSeat_Click);
+                            panelSeats.Controls.Add(label);
+                        }
+                    }
+                    resetState();
                 }
                 stream.Close();
             }
-
-            panelSeats.Controls.Clear();
-
-            List<Label> labelList = seatList.GenerateLabels();
-
-            foreach (Label label in labelList)
-            {
-                {
-                    label.Click += new System.EventHandler(labelSeat_Click);
-                    panelSeats.Controls.Add(label);
-                }
-            }
+        }//End of buttonLoad_Click
+        private void resetState()
+        {
             buttonGenerateSeats.Enabled = false;
             buttonPersonA.Enabled = true;
             buttonPersonB.Enabled = true;
@@ -797,7 +564,7 @@ namespace SeatBookingSimulator
             {
                 buttonPersonD.Enabled = false;
             }
-        }//End of buttonLoad_Click
+        }
 
         private void buttonEndSimulation_Click(object sender, EventArgs e)
         {

@@ -23,6 +23,8 @@ namespace SeatBookingSimulator.Classes
         private string _belongToPerson = "";
         private string _canBookedBy = "";
 
+        private bool _smartMode = false;
+
         public int Row // property
         {
             get { return _row; } // get method
@@ -63,6 +65,11 @@ namespace SeatBookingSimulator.Classes
             get { return _bookStatus; } // get method
             set {_bookStatus = value;} // set method
         }
+        public bool SmartMode // property
+        {
+            get { return _smartMode; } // get method
+            set { _smartMode = value; } // set method
+        }
         //ComputeSeatLabel is a method defined inside the Seat class
         //ComputeSeatLabel is "not" a property.
         public string ComputeSeatLabel()
@@ -86,6 +93,10 @@ namespace SeatBookingSimulator.Classes
             if (this.CanBook == false)
             {
                 labelSeat.BackColor = Color.IndianRed;
+            }
+            else if (this.SmartMode == true && this.CanBookedBy != "")
+            {
+                labelSeat.BackColor = Color.LightYellow;
             }
             if (this.BookStatus == true && this.CanBook == true)
             {
